@@ -1,0 +1,22 @@
+name: plod
+description: (wip) A package for Flutter that enables you to manage app state declaratively.
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fpdart: ^0.4.1
+  hooks_riverpod: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
