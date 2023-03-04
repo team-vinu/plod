@@ -1,14 +1,15 @@
 part of plod;
 
-abstract class PlodsConsumerWidget extends StatelessWidget {
-  const PlodsConsumerWidget(this.plods, {Key? key}) : super(key: key);
+abstract class PlodConsumerWidget extends StatelessWidget {
+  const PlodConsumerWidget({Key? key, required this.plodChain})
+      : super(key: key);
 
-  final Plods plods;
+  final PlodChain plodChain;
 
   @override
   Widget build(BuildContext context) {
-    return PlodsScope(
-      plods: plods,
+    return PlodScope(
+      plodChain: plodChain,
       ok: onSuccess,
       loading: onLoading,
       err: onFailure,

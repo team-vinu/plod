@@ -1,26 +1,7 @@
 part of plod;
 
-class Plod<T> {
-  Plod(
-    Future<T> Function() loadingFunc,
-  ) : _task = Task(loadingFunc);
-
-  final Task<T> _task;
-  Option<T> _valueOption = const Option.none();
-
-  T get value => _valueOption.getOrElse(() => throw PlodNotLoadedError(this));
-
-  @protected
-  Future<void> load() async {
-    final taskResult = await _task.run();
-    _valueOption = Option.of(taskResult);
-  }
-}
-
-class ResultPlod<T> extends Plod<T> {
-  ResultPlod(
-    Future<T> Function() loadingFunc,
-  ) : super(loadingFunc);
+class ResultPlod<T, U> extends PlodType<T, U> {
+  ResultPlod(FutureOr<T> Function(U) loadingFunc) : super(loadingFunc);
 
   Option<Object> _errOption = const Option.none();
   Option<Object> get errOption => _errOption;
@@ -30,10 +11,9 @@ class ResultPlod<T> extends Plod<T> {
       );
 
   @override
-  Future<void> load() async {
+  Future<void> load(U arg) async {
     try {
-      final taskResult = await _task.run();
-      _valueOption = Option.of(taskResult);
+      _valueOption = Option.of(await loadingFunc(arg));
     } catch (e) {
       _valueOption = const Option.none();
       _errOption = Option.of(e);
@@ -65,16 +45,5 @@ class ResultPlod<T> extends Plod<T> {
     required R Function(Object) err,
   }) {
     return maybeErr(ok: ok, err: err);
-  }
-}
-
-class PlodNotLoadedError extends Error {
-  PlodNotLoadedError(this.plod);
-
-  final Plod plod;
-
-  @override
-  String toString() {
-    return "PlodNotLoadedError: ${plod.runtimeType.toString()}";
   }
 }
